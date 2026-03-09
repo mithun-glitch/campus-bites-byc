@@ -2,11 +2,30 @@
 <html>
 <head>
 <title>Campus Bites Admin</title>
+
 <style>
-body{font-family:Arial;background:#111;color:white;padding:30px}
-.order{background:#222;padding:15px;margin-bottom:10px;border-radius:6px}
-button{margin-left:10px;padding:6px 10px}.deleteBtn{
-background:rgb(121, 156, 223);
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+padding:30px
+}
+
+.order{
+background:#222;
+padding:15px;
+margin-bottom:10px;
+border-radius:6px
+}
+
+button{
+margin-left:10px;
+padding:6px 10px
+}
+
+.deleteBtn{
+background:rgb(121,156,223);
 color:white;
 border:none;
 padding:6px 12px;
@@ -17,7 +36,14 @@ border-radius:4px;
 .deleteBtn:hover{
 background:#303a24;
 }
+
+.items{
+margin-top:8px;
+color:#ddd;
+}
+
 </style>
+
 </head>
 
 <body>
@@ -30,6 +56,7 @@ background:#303a24;
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
 const firebaseConfig = {
 apiKey:"AIzaSyA8kNM2yoTZdaz-UE956vuTGxAccg4JXus",
 authDomain:"campus-bites-byc.firebaseapp.com",
@@ -40,29 +67,56 @@ messagingSenderId:"306684832128",
 appId:"1:306684832128:web:8d50dd8718e5ec5de73965"
 };
 
-const app=initializeApp(firebaseConfig)
-const db=getDatabase(app)
+const app = initializeApp(firebaseConfig)
+const db = getDatabase(app)
 
-const ordersRef=ref(db,"orders")
+const ordersRef = ref(db,"orders")
 
 onValue(ordersRef,(snapshot)=>{
 
-let data=snapshot.val()
-let container=document.getElementById("orders")
+let data = snapshot.val()
+let container = document.getElementById("orders")
 container.innerHTML=""
+
+if(!data){
+container.innerHTML="No Orders Yet"
+return
+}
 
 for(let id in data){
 
-let order=data[id]
+let order = data[id]
+
+let itemsHTML=""
+
+if(order.items){
+
+for(let item in order.items){
+
+itemsHTML += `${item} x ${order.items[item]}<br>`
+
+}
+
+}
 
 container.innerHTML+=`
+
 <div class="order">
-Order: ${id}<br>
-Total: ${order.total}<br>
-Status: ${order.status}
+
+<b>Order ID:</b> ${id}<br>
+
+<div class="items">
+<b>Items Ordered:</b><br>
+${itemsHTML}
+</div>
+
+<b>Total:</b> ${order.total}<br>
+<b>Status:</b> ${order.status}<br><br>
 
 <button onclick="updateStatus('${id}','Cooking')">Cooking</button>
+
 <button onclick="updateStatus('${id}','Ready')">Ready</button>
+
 <button onclick="updateStatus('${id}','Delivered')">Delivered</button>
 
 <br><br>
@@ -72,19 +126,22 @@ Delete Order
 </button>
 
 </div>
+
 `
+
 }
 
 })
 
-window.updateStatus=function(id,status){
+window.updateStatus = function(id,status){
 
 update(ref(db,"orders/"+id),{
 status:status
 })
 
 }
-window.deleteOrder=function(id){
+
+window.deleteOrder = function(id){
 
 if(confirm("Delete this order?")){
 
