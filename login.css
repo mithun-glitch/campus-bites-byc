@@ -1,0 +1,123 @@
+body{
+margin:0;
+font-family:Segoe UI;
+background:rgb(7, 1, 7);
+color:rgb(220, 220, 220);
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+/* animated background */
+
+.background{
+position:absolute;
+width:100%;
+height:100%;
+background:radial-gradient(circle at 20% 30%,#8995c0,transparent),
+radial-gradient(circle at 80% 70%,#0d4291,transparent);
+filter:blur(60px);
+z-index:-1;
+}
+
+/* login card */
+
+.login-container{
+
+background:rgba(6, 0, 0, 0.9);
+padding:40px;
+border-radius:16px;
+width:320px;
+
+box-shadow:
+0 0 60px rgba(192, 187, 179, 0.3),
+0 0 60px rgb(169, 170, 163);
+
+text-align:center;
+
+backdrop-filter:blur(10px);
+}
+
+.login-container h1{
+margin-bottom:5px;
+letter-spacing:1px;
+}
+
+.subtitle{
+color:#aaa;
+margin-bottom:25px;
+}
+
+/* inputs */
+
+.input-group{
+position:relative;
+margin-bottom:25px;
+}
+
+.input-group input{
+
+width:100%;
+padding:12px;
+background:transparent;
+border:none;
+border-bottom:2px solid #444;
+color:white;
+font-size:15px;
+outline:none;
+}
+
+.input-group label{
+
+position:absolute;
+left:0;
+top:12px;
+color:#777;
+transition:.3s;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label{
+
+top:-10px;
+font-size:12px;
+color:#696741;
+
+}
+
+/* login button */
+
+button{
+
+width:100%;
+padding:12px;
+
+background:#262c3d;
+border:none;
+
+border-radius:8px;
+
+color:white;
+font-size:16px;
+
+cursor:pointer;
+
+transition:.25s;
+}
+
+button:hover{
+
+background:#a0a8c9;
+transform:scale(1.03);
+
+}
+
+.footer{
+
+margin-top:20px;
+font-size:13px;
+color:#777;
+
+}

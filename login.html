@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Campus Bites Login</title>
+<link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="login-container">
+
+<h1>CAMPUS BITES BYC</h1>
+
+<p class="subtitle">Login or Register using your Christ email</p>
+
+<div class="input-group">
+<input type="email" id="email" required>
+<label>Email</label>
+</div>
+
+<div class="input-group">
+<input type="password" id="password" required>
+<label>Password</label>
+</div>
+
+
+
+<button onclick="loginUser()">Login</button>
+<br><br>
+<button onclick="registerUser()">Register</button>
+
+<p class="footer"></p>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyA8kNM2yoTZdaz-UE956vuTGxAccg4JXus",
+authDomain: "campus-bites-byc.firebaseapp.com",
+projectId: "campus-bites-byc",
+storageBucket: "campus-bites-byc.firebasestorage.app",
+messagingSenderId: "306684832128",
+appId: "1:306684832128:web:8d50dd8718e5ec5de73965"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
+window.loginUser = function(){
+
+let email = document.getElementById("email").value
+let password = document.getElementById("password").value
+
+signInWithEmailAndPassword(auth,email,password)
+
+.then(()=>{
+alert("Login successful")
+window.location.href="index.html"
+})
+
+.catch((error)=>{
+alert("Login failed: "+error.message)
+})
+
+}
+
+
+window.registerUser = function(){
+
+let email = document.getElementById("email").value
+let password = document.getElementById("password").value
+
+createUserWithEmailAndPassword(auth,email,password)
+
+.then(()=>{
+alert("Account created successfully")
+})
+
+.catch((error)=>{
+alert("Registration failed: "+error.message)
+})
+
+}
+
+</script>
+
+</body>
+</html>

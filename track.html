@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Tracking</title>
+<link rel="stylesheet" href="track.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Track Your Order</h1>
+
+<div class="track-box">
+
+<input id="orderId" placeholder="Enter Order ID">
+
+<button onclick="track()">Track Order</button>
+
+</div>
+
+<div class="status-card">
+
+<h2>Order Status</h2>
+
+<p id="status">Waiting for order...</p>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+
+const firebaseConfig={
+apiKey:"AIzaSyA8kNM2yoTZdaz-UE956vuTGxAccg4JXus",
+authDomain:"campus-bites-byc.firebaseapp.com",
+databaseURL:"https://campus-bites-byc-default-rtdb.firebaseio.com",
+projectId:"campus-bites-byc",
+storageBucket:"campus-bites-byc.firebasestorage.app",
+messagingSenderId:"306684832128",
+appId:"1:306684832128:web:8d50dd8718e5ec5de73965"
+}
+
+
+const app = initializeApp(firebaseConfig)
+
+const db = getDatabase(app)
+
+
+
+window.track = function(){
+
+let id = document.getElementById("orderId").value
+
+if(!id){
+
+document.getElementById("status").innerText="Enter Order ID"
+
+return
+
+}
+
+onValue(ref(db,"orders/"+id),(snapshot)=>{
+
+let data = snapshot.val()
+
+if(data){
+
+document.getElementById("status").innerText = "Status: " + data.status
+
+}
+
+else{
+
+document.getElementById("status").innerText = "No orders yet"
+
+}
+
+})
+
+}
+
+
+
+window.onload = function(){
+
+let savedOrder = localStorage.getItem("currentOrder")
+
+if(savedOrder){
+
+document.getElementById("orderId").value = savedOrder
+
+track()
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

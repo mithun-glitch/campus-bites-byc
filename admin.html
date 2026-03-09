@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Campus Bites Admin</title>
+<style>
+body{font-family:Arial;background:#111;color:white;padding:30px}
+.order{background:#222;padding:15px;margin-bottom:10px;border-radius:6px}
+button{margin-left:10px;padding:6px 10px}.deleteBtn{
+background:rgb(121, 156, 223);
+color:white;
+border:none;
+padding:6px 12px;
+cursor:pointer;
+border-radius:4px;
+}
+
+.deleteBtn:hover{
+background:#303a24;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Incoming Orders</h1>
+
+<div id="orders"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+const firebaseConfig = {
+apiKey:"AIzaSyA8kNM2yoTZdaz-UE956vuTGxAccg4JXus",
+authDomain:"campus-bites-byc.firebaseapp.com",
+databaseURL:"https://campus-bites-byc-default-rtdb.firebaseio.com",
+projectId:"campus-bites-byc",
+storageBucket:"campus-bites-byc.firebasestorage.app",
+messagingSenderId:"306684832128",
+appId:"1:306684832128:web:8d50dd8718e5ec5de73965"
+};
+
+const app=initializeApp(firebaseConfig)
+const db=getDatabase(app)
+
+const ordersRef=ref(db,"orders")
+
+onValue(ordersRef,(snapshot)=>{
+
+let data=snapshot.val()
+let container=document.getElementById("orders")
+container.innerHTML=""
+
+for(let id in data){
+
+let order=data[id]
+
+container.innerHTML+=`
+<div class="order">
+Order: ${id}<br>
+Total: ${order.total}<br>
+Status: ${order.status}
+
+<button onclick="updateStatus('${id}','Cooking')">Cooking</button>
+<button onclick="updateStatus('${id}','Ready')">Ready</button>
+<button onclick="updateStatus('${id}','Delivered')">Delivered</button>
+
+<br><br>
+
+<button class="deleteBtn" onclick="deleteOrder('${id}')">
+Delete Order
+</button>
+
+</div>
+`
+}
+
+})
+
+window.updateStatus=function(id,status){
+
+update(ref(db,"orders/"+id),{
+status:status
+})
+
+}
+window.deleteOrder=function(id){
+
+if(confirm("Delete this order?")){
+
+remove(ref(db,"orders/"+id))
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
