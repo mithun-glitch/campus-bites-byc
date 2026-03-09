@@ -76,6 +76,7 @@ onValue(ordersRef,(snapshot)=>{
 
 let data = snapshot.val()
 let container = document.getElementById("orders")
+
 container.innerHTML=""
 
 if(!data){
@@ -91,11 +92,14 @@ let itemsHTML=""
 
 if(order.items){
 
-for(let item in order.items){
+order.items.forEach(item=>{
 
-itemsHTML += `${item} x ${order.items[item]}<br>`
+let name = item.name
+let qty = item.quantity
 
-}
+itemsHTML += `${name} x ${qty}<br>`
+
+})
 
 }
 
@@ -133,7 +137,7 @@ Delete Order
 
 })
 
-window.updateStatus = function(id,status){
+window.updateStatus=function(id,status){
 
 update(ref(db,"orders/"+id),{
 status:status
@@ -141,7 +145,7 @@ status:status
 
 }
 
-window.deleteOrder = function(id){
+window.deleteOrder=function(id){
 
 if(confirm("Delete this order?")){
 
