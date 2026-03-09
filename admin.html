@@ -94,8 +94,8 @@ if(order.items){
 
 order.items.forEach(item=>{
 
-let name = item.name
-let qty = item.quantity
+let name = item.name || item.item || "Food Item"
+let qty = item.quantity || item.qty || item.count || 1
 
 itemsHTML += `${name} x ${qty}<br>`
 
