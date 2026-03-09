@@ -1,140 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
-<title>Campus FoodHub</title>
-<link rel="stylesheet" href="style.css">
+<title>Campus Bites Login</title>
+<link rel="stylesheet" href="login.css">
 </head>
 
 <body>
 
-<header>
+<div class="background"></div>
 
-<div class="logo">Campus Bites</div>
+<div class="login-container">
 
-<input id="searchBar" placeholder="Search stalls..." onkeyup="searchStalls()">
-<button onclick="openTrack()" class="trackBtn">
-Track Order
-</button>
-<button onclick="openCart()" class="cartBtn">
- Cart (<span id="cartCount">0</span>)
-</button>
+<h1>CAMPUS BITES BYC</h1>
 
-</header>
-<section class="hero">
+<p class="subtitle">Login or Register using your Christ email</p>
 
-<h1>Campus Bites</h1><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<p>Order food from your favorite campus stalls</p>
-<button onclick="document.getElementById('stallSection').scrollIntoView()">
-Browse Stalls
-</button>
+<div class="input-group">
+<input type="email" id="email" required>
+<label>Email</label>
+</div>
 
-</section>
-
-<section id="stallSection">
-
-<h2>FOOD STALLS</h2>
-
-<div id="stallContainer"></div>
-
-</section>
+<div class="input-group">
+<input type="password" id="password" required>
+<label>Password</label>
+</div>
 
 
 
-<section id="menuSection" class="hidden">
+<button onclick="loginUser()">Login</button>
+<br><br>
+<button onclick="registerUser()">Register</button>
 
-<button class="backBtn" onclick="goHome()">← Back</button>
-
-<h2 id="stallTitle"></h2>
-
-<div id="menuContainer"></div>
-
-</section>
-
-
-
-<div id="cartPanel" class="hidden">
-
-<button class="closeCart" onclick="closeCart()">✖</button>
-<h2>Your Cart</h2>
-
-<div id="cartItems"></div>
-
-<h3 id="cartTotal"></h3>
-
-<button class="checkoutBtn" onclick="showPaymentOptions()">Place Order</button></div>
-
-<div id="paymentPopup" class="paymentPopup hidden">
-
-<h2>Select Payment Method</h2>
-
-<button onclick="payCOD()">Cash on Delivery</button>
-
-<button disabled>Online Payment(coming soon)</button>
-
-<button class="closePay" onclick="closePayment()">Cancel</button>
+<p class="footer"></p>
 
 </div>
 
-<div id="orderPopup" class="orderPopup hidden">
 
-<div class="orderBox">
-
-<h2>Order Confirmed 🎉</h2>
-
-<p id="orderID"></p>
-
-<p>Your food is being prepared</p>
-
-<button onclick="goHome()">Back to Menu</button>
-
-<button onclick="trackOrder()">Track Your Order</button>
-
-</div>
-
-</div>
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA8kNM2yoTZdaz-UE956vuTGxAccg4JXus",
-  authDomain: "campus-bites-byc.firebaseapp.com",
-  projectId: "campus-bites-byc",
-  databaseURL: "https://campus-bites-byc-default-rtdb.firebaseio.com",
-  storageBucket: "campus-bites-byc.firebasestorage.app",
-  messagingSenderId: "306684832128",
-  appId: "1:306684832128:web:8d50dd8718e5ec5de73965"
+apiKey: "AIzaSyA8kNM2yoTZdaz-UE956vuTGxAccg4JXus",
+authDomain: "campus-bites-byc.firebaseapp.com",
+projectId: "campus-bites-byc",
+storageBucket: "campus-bites-byc.firebasestorage.app",
+messagingSenderId: "306684832128",
+appId: "1:306684832128:web:8d50dd8718e5ec5de73965"
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const auth = getAuth(app);
 
-window.saveOrder = function(cart,total){
 
-const ordersRef = ref(db,"orders");
+window.loginUser = function(){
 
-const newOrder = push(ordersRef,{
-items: cart,
-total: total,
-status:"Preparing",
-time: new Date().toString()
-});
+let email = document.getElementById("email").value
+let password = document.getElementById("password").value
 
-let orderId = newOrder.key;
+signInWithEmailAndPassword(auth,email,password)
 
-localStorage.setItem("currentOrder",orderId);
+.then(()=>{
+alert("Login successful")
+window.location.href="home.html"
+})
 
-document.getElementById("orderID").innerText="Order ID: "+orderId;
+.catch((error)=>{
+alert("Login failed: "+error.message)
+})
+
+}
+
+
+window.registerUser = function(){
+
+let email = document.getElementById("email").value
+let password = document.getElementById("password").value
+
+createUserWithEmailAndPassword(auth,email,password)
+
+.then(()=>{
+alert("Account created successfully")
+})
+
+.catch((error)=>{
+alert("Registration failed: "+error.message)
+})
 
 }
 
 </script>
 
-
-<script src="script.js"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>
